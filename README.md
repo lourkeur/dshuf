@@ -7,3 +7,9 @@ operators commit to a round number in the future and reveal a list of participan
 and the canonical winners can be reproducibly computed once the round occurs.
 
 [League Of Entropy]: https://drand.love/
+
+## Roadmap (non-committal)
+- [ ] MVP
+- [ ] Add `-n` command line option
+- [ ] Add Go implementation
+- [ ] Add Web implementation
