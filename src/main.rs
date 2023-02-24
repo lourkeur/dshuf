@@ -15,5 +15,11 @@ fn main() {
     // TODO
     //dbg!(surf::get(format!("{api_baseurl}/public/{round_number}")));
     verify(&pubkey, round_number, &[], &signature).unwrap();
-    println!("{}", hex::encode(derive_randomness(&signature)));
+    let randomness = derive_randomness(&signature);
+    println!("{}", hex::encode(randomness));
+
+    // simulate shuf -n 3
+    let input = vec!("Alice", "Bob", "Carla", "David");
+    let output = nois::pick(randomness, 3, input);
+    println!("{:?}", output);
 }
