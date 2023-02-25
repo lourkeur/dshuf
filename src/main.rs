@@ -1,6 +1,9 @@
 use drand_verify::{derive_randomness, g1_from_fixed, verify};
 
 use hex;
+use num_bigint::BigUint;
+use num_traits::cast::ToPrimitive;
+use sha2::{Digest, Sha256};
 
 fn main() {
     let mut PK_LEO_MAINNET = [0u8; 48];
@@ -19,7 +22,17 @@ fn main() {
     println!("{}", hex::encode(randomness));
 
     // simulate shuf -n 3
-    let input = vec!("Alice", "Bob", "Carla", "David");
-    let output = nois::pick(randomness, 3, input);
+    let mut input = vec!("Alice", "Bob", "Carla", "David");
+    let input_len = input.len();
+    let output_len = 3;
+    for i in 0..output_len {
+        let mut h = Sha256::new();
+        h.update(randomness);
+        h.update(BigUint::from(i).to_bytes_be());
+        let r = BigUint::from_bytes_be(&h.finalize()[..]);
+        input.swap(i, i+ (r % (input_len -1 - i)).to_usize().unwrap());
+    }
+    input.resize_with(output_len, || panic!("unreachable"));
+    let output = input;
     println!("{:?}", output);
 }
