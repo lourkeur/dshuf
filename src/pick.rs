@@ -9,16 +9,16 @@ pub fn pick<'a>(
     output_len: usize,
 ) -> Vec<&'a [u8]> {
     let input_len = input.len();
-    let mut samples = vec![0u8; SAMPLE_LEN * output_len];
     let mut h = blake3::Hasher::new_keyed(randomness);
     for e in &input {
         h.update(e);
         h.update(&[0u8]);
     }
-    // TODO: seed prng with shuffle inputs
-    h.finalize_xof().fill(samples.as_mut_slice());
-    for (i, sample) in samples.chunks(SAMPLE_LEN).enumerate() {
-        let r = BigUint::from_bytes_be(sample);
+    let mut prng = h.finalize_xof();
+    for i in 0..input_len {
+        let mut sample = [0u8; SAMPLE_LEN];
+        prng.fill(&mut sample);
+        let r = BigUint::from_bytes_be(&sample);
         input.swap(i, i + (r % (input_len - i)).to_usize().unwrap());
     }
     input.resize_with(output_len, || panic!("unreachable"));
