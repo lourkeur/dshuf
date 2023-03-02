@@ -9,18 +9,19 @@ pub fn pick<'a>(
     output_len: usize,
 ) -> Vec<&'a [u8]> {
     let input_len = input.len();
+    assert!(output_len <= input_len);
     let mut h = blake3::Hasher::new_keyed(randomness);
     for e in &input {
         h.update(e);
         h.update(&[0u8]);
     }
     let mut prng = h.finalize_xof();
-    for i in 0..input_len {
+    for i in 0..output_len {
         let mut sample = [0u8; SAMPLE_LEN];
         prng.fill(&mut sample);
         let r = BigUint::from_bytes_be(&sample);
         input.swap(i, i + (r % (input_len - i)).to_usize().unwrap());
     }
-    input.resize_with(output_len, || panic!("unreachable"));
+    input.resize_with(output_len, || unreachable!());
     input
 }
