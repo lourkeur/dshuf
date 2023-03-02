@@ -23,7 +23,7 @@ fn main() {
     println!("{}", hex::encode(randomness));
 
     // simulate shuf -n 3
-    let input = vec!["Alice", "Bob", "Carla", "David"];
+    let input = vec![&b"Alice"[..], &b"Bob"[..], &b"Carla"[..], &b"David"[..]];
     let output = pick(&randomness, input, 3);
     println!("{:?}", output);
 }
