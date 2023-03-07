@@ -5,7 +5,7 @@ use futures::executor::block_on;
 use hex;
 
 use dshuf::drand_api;
-use dshuf::pick::pick;
+use dshuf::shuffle;
 
 fn main() {
     let mut PK_LEO_MAINNET = [0u8; 48];
@@ -24,6 +24,6 @@ fn main() {
 
     // simulate shuf -n 3
     let input = vec![&b"Alice"[..], &b"Bob"[..], &b"Carla"[..], &b"David"[..]];
-    let output = pick(&randomness, input, 3);
+    let output = shuffle(&randomness, input, 3);
     println!("{:?}", output);
 }

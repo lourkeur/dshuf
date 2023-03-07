@@ -1,2 +1,4 @@
 pub mod drand_api;
-pub mod pick;
+mod core;
+
+pub use crate::core::shuffle;
