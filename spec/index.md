@@ -24,7 +24,7 @@ Thus, users must assume that DRand is working as designed when they use dshuf.
 ### Set up
 
 Participants must agree on a canonical representation of the items they want to shuffle,
-which must consists of a byte representation of each entry and an initial order.
+which must consist of a byte representation of each entry and an initial order.
 They must also agree on when and how the random beacon will be consulted.
 In the DRand case they must choose a round number in the future.
 
