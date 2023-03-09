@@ -18,7 +18,7 @@ struct TestCase {
 
 impl TestCase {
     fn parse(name: &str) -> Self {
-        let file = File::open(format!("src/tests/testcases/{name}.json")).unwrap();
+        let file = File::open(format!("../testcases/{name}.json")).unwrap();
          let reader = BufReader::new(file);
         from_reader(reader).unwrap()
     }

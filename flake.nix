@@ -9,7 +9,11 @@
       perSystem = {pkgs, ...}: {
         packages.default = with pkgs;
           mkShell {
-            buildInputs = [openssl.dev pkg-config];
+            buildInputs = [
+              # To compile curl under Rust
+                openssl.dev
+              pkg-config
+            ];
           };
         formatter = pkgs.alejandra;
       };
