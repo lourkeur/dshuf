@@ -12,8 +12,8 @@ pub fn shuffle<'a>(
     assert!(limit <= input_len);
     let mut h = blake3::Hasher::new_keyed(randomness);
     for e in &input {
+        h.update(&(e.len() as u64).to_be_bytes());
         h.update(e);
-        h.update(&[0u8]);
     }
     let mut prng = h.finalize_xof();
     for i in 0..limit {

@@ -10,7 +10,7 @@ using a random beacon.
 
 ## Limitations
 
-No entry in the input list contains the null byte and the number of entries must not exceed `2⁶⁴ - 1`.
+The length of an entry's byte representation must not exceed `2⁶⁴ - 1` and the number of entries must not exceed `2⁶⁴ - 1`.
 
 Negligible probability is defined as less than or equal to `2⁻¹²⁸`.
 
@@ -34,7 +34,7 @@ In the DRand case they must choose a round number in the future.
 All participants consult the random beacon to learn the random value.
 They then execute the following program:
 - evaluate the `blake3` extendable output function with the random value as the key,
-and the null-separated canonical representation of the entries as input.
+and the canonical representation of the entries preceded by the big-endian, 8 byte representation of their length in bytes as input.
 - Store the input list in an array `t` in canonical order.
 - Then, for `i` in `0 .. len(t)`:
   - pull the next 192 bits from the output of `blake3` and interpret them as a big-endian integer value `r`.
