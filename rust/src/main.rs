@@ -3,6 +3,7 @@ use drand_verify::{derive_randomness, g1_from_fixed, verify};
 use futures::executor::block_on;
 
 use hex;
+use std::io::{self, Read};
 
 use dshuf::drand_api;
 use dshuf::shuffle;
@@ -20,10 +21,16 @@ fn main() {
 
     verify(&pubkey, round_number, &previous_signature, &signature).unwrap();
     let randomness = derive_randomness(&signature);
-    println!("{}", hex::encode(randomness));
 
     // simulate shuf -n 3
-    let input = vec![&b"Alice"[..], &b"Bob"[..], &b"Carla"[..], &b"David"[..]];
+    let mut stdin = io::stdin();
+    let mut buf = Vec::new();
+    stdin.read_to_end(&mut buf).unwrap();
+    let separator = '\n';
+    let mut input = Vec::from_iter(buf.split(|c| *c == separator as u8));
+    if input.last().map_or(false, |e| e.len() == 0) {
+        input.truncate(input.len()-1);
+    }
     let output = shuffle(&randomness, input, 3);
     println!("{:?}", output);
 }
