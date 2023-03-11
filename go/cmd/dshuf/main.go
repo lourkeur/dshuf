@@ -1,9 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"github.com/lourkeur/dshuf/go/dshuf"
+	"io"
 	"log"
+	"os"
 )
 
 func main() {
@@ -15,7 +17,18 @@ func main() {
 	randomness := rep.Randomness()
 
 	// simulate shuf -n 3
-	entries := [][]byte{[]byte("Alice"), []byte("Bob"), []byte("Carla"), []byte("David")}
+	input, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		log.Fatal(err)
+	}
+	separator := []byte("\n")
+	entries := bytes.Split(input, separator)
+	if len(entries[len(entries)-1]) == 0 {
+		entries = entries[:len(entries)-1]
+	}
 	dshuf.ShuffleInplace(randomness, &entries, 3)
-	fmt.Println(entries)
+	for _, e := range entries {
+		os.Stdout.Write(e)
+		os.Stdout.Write(separator)
+	}
 }
