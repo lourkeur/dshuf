@@ -15,6 +15,9 @@ func ShuffleInplace(
 	limit int,
 ) {
 	es := *input
+	if limit > len(es) {
+		limit = len(es)
+	}
 	h, _ := blake3.NewKeyed(randomness)
 	for _, e := range es {
 		var buf [8]byte
@@ -28,7 +31,7 @@ func ShuffleInplace(
 		var sample [SAMPLE_LEN]byte
 		prng.Read(sample[:])
 		r := new(big.Int).SetBytes(sample[:])
-		r.Mod(r, big.NewInt(int64(len(*input)-i)))
+		r.Mod(r, big.NewInt(int64(len(es)-i)))
 		j := i + int(r.Uint64())
 		es[i], es[j] = es[j], es[i]
 	}
